@@ -1,0 +1,56 @@
+@property --gb-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes gb-spin { to { --gb-a: 360deg; } }
+@keyframes mq { to { transform: translateX(calc(-50% - 0.5rem)); } }
+
+/* Border-glow card + pill button. The spin is paused until hover/focus, so idle cards cost nothing. */
+.gb, .gbtn { position: relative; isolation: isolate; padding: 1px; background: rgba(255,255,255,.1); }
+.gb { border-radius: 1rem; }
+.gbtn { display: inline-flex; border-radius: 999px; }
+.gbtn-full { display: flex; width: 100%; }
+.gbtn-full .gbtn-in { width: 100%; justify-content: center; }
+.gb::before, .gbtn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0;
+  background: conic-gradient(from var(--gb-a), transparent 0 62%, #ff8c00 80%, #ffd89a 90%, transparent 100%);
+  animation: gb-spin 3.5s linear infinite paused; transition: opacity .4s;
+}
+.gb:hover::before, .gb:focus-within::before, .gb-hot::before, .gbtn:hover::before, .gbtn:focus-visible::before { opacity: 1; animation-play-state: running; }
+.gb-in { display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: calc(1rem - 1px); background: linear-gradient(to bottom, #121212, #070707); }
+.gb-hot .gb-in { background: linear-gradient(to bottom, #1d1307, #080808); }
+.gbtn-in { display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.25rem; border-radius: 999px; background: #000; color: #fff; font-size: .875rem; font-weight: 500; white-space: nowrap; }
+.gbtn:active { transform: scale(.96); }
+
+/* Testimonial marquee */
+.mq-wrap { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.mq { display: flex; gap: 1rem; width: max-content; animation: mq 70s linear infinite; }
+.mq-rev { animation-direction: reverse; }
+.mq-wrap:hover .mq { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .gb::before, .gbtn::before, .mq { animation: none; } .mq-wrap { overflow-x: auto; } }
+
+/* Layout helpers */
+.amb { position: absolute; left: 50%; top: -2rem; z-index: -1; width: min(100vw, 1200px); height: 18rem; transform: translateX(-50%); background: radial-gradient(ellipse at center, rgba(255,122,0,.12), transparent 70%); pointer-events: none; }
+.bento { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+.feat { display: flex; flex-direction: column; height: 100%; }
+@media (min-width: 768px) {
+  .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .s2 { grid-column: span 2; } .s3 { grid-column: span 3; } .s4 { grid-column: span 4; }
+  .feat-wide { flex-direction: row; }
+  .feat-wide > .scene { display: flex; align-items: center; width: 46%; border-bottom: 0; border-right: 1px solid rgba(255,255,255,.1); }
+  .feat-wide > .scene svg { width: 100%; }
+  .feat-wide > .feat-body { display: flex; flex: 1; flex-direction: column; justify-content: center; }
+}
+
+/* Footer wordmark: solid gradient fill (bright top edge fading into the page), cropped to the top ~80% of the letters. */
+.footer-wordmark {
+  font-size: clamp(2.4rem, 13.5vw, 10.5rem);
+  line-height: .8;
+  height: .62em;
+  overflow: hidden;
+  color: transparent;
+  background: linear-gradient(180deg, rgba(255,255,255,.34) 0%, rgba(255,186,110,.2) 38%, rgba(255,122,0,.07) 70%, transparent 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 1px rgba(255,255,255,.1);
+}
+
+/* Smooth anchor scrolling for the header links */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }

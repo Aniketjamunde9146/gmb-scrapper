@@ -1,0 +1,263 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------- shadcn/ui tokens · saffron theme ---------- */
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.992 0.005 80);
+  --foreground: oklch(0.2 0.02 40);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 40);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 40);
+  --primary: oklch(0.57 0.205 38);
+  --primary-foreground: oklch(0.99 0.01 75);
+  --secondary: oklch(0.965 0.015 70);
+  --secondary-foreground: oklch(0.3 0.04 40);
+  --muted: oklch(0.965 0.01 75);
+  --muted-foreground: oklch(0.48 0.03 50);
+  --accent: oklch(0.955 0.04 70);
+  --accent-foreground: oklch(0.35 0.1 40);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.915 0.015 70);
+  --input: oklch(0.9 0.02 65);
+  --ring: oklch(0.68 0.19 45);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --popover: oklch(0.17 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.75 0.18 58);
+  --primary-foreground: oklch(0.16 0 0);
+  --secondary: oklch(0.21 0 0);
+  --secondary-foreground: oklch(0.97 0 0);
+  --muted: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(1 0 0 / 9%);
+  --accent-foreground: oklch(0.97 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.75 0.18 58);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Solid saffron gradient: primary buttons, logo mark, progress bars. No images, no blur, very cheap to paint. */
+  .grain-saffron {
+    background-image: linear-gradient(135deg, oklch(0.72 0.19 55) 0%, oklch(0.62 0.21 42) 50%, oklch(0.53 0.2 33) 100%);
+    color: white;
+  }
+  .dark .grain-saffron {
+    color: oklch(0.16 0.03 45);
+  }
+
+  /* Hero backdrop: plain CSS gradients (replaces the old per-pixel canvas, which burned CPU on cheap phones). */
+  .hero-bg {
+    background-color: var(--background);
+    background-image:
+      radial-gradient(60% 55% at 15% 0%, oklch(0.9 0.09 75 / 0.65), transparent 70%),
+      radial-gradient(50% 50% at 90% 10%, oklch(0.85 0.1 50 / 0.5), transparent 70%);
+  }
+  .dark .hero-bg {
+    background-image:
+      radial-gradient(60% 55% at 15% 0%, oklch(0.42 0.1 60 / 0.5), transparent 70%),
+      radial-gradient(50% 50% at 90% 10%, oklch(0.4 0.12 40 / 0.4), transparent 70%);
+  }
+  .cta-bg {
+    background-image: linear-gradient(135deg, oklch(0.72 0.19 55) 0%, oklch(0.6 0.21 40) 55%, oklch(0.5 0.19 30) 100%);
+  }
+
+  /* Skip rendering work for sections that are far below the screen. Big win on slow phones. */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-in {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-in-2 {
+  animation: rise 0.6s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-in-3 {
+  animation: rise 0.6s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* =====================================================================
+   Landing theme bridge.
+   The landing components are written with white/black utilities. Tailwind v4 reads
+   them from --color-white / --color-black, so flipping those two variables (plus --ink
+   for SVGs) gives a full light theme with zero changes to the markup.
+   ===================================================================== */
+.lm-root { --ink: 255 255 255; }
+html:not(.dark) .lm-root {
+  --color-white: #1a1410;
+  --color-black: #fffaf3;
+  --ink: 26 20 16;
+}
+/* Parts that are product screenshots / photos stay dark in both themes. */
+.lm-dark { --color-white: #fff; --color-black: #000; --ink: 255 255 255; color: #fff; }
+
+html:not(.dark) .lm-root .text-orange-200,
+html:not(.dark) .lm-root .text-orange-300 { color: #c2410c; }
+html:not(.dark) .lm-root .text-orange-400 { color: #ea580c; }
+html:not(.dark) .gb { background: rgba(26, 20, 16, 0.12); }
+html:not(.dark) .gb-in { background: linear-gradient(to bottom, #ffffff, #fbf6ee); }
+html:not(.dark) .gb-hot .gb-in { background: linear-gradient(to bottom, #fff3e2, #fffaf3); }
+html:not(.dark) .gbtn-in { background: #1a1410; color: #fffaf3; }
+html:not(.dark) .footer-wordmark { background-image: linear-gradient(180deg, rgba(26,20,16,.2) 0%, rgba(255,122,0,.2) 45%, transparent 100%); -webkit-text-stroke: 1px rgba(26,20,16,.06); }
+html:not(.dark) footer { color: #1a1410; }
+html:not(.dark) .lm-root .shadow-hero { box-shadow: none; }
+
+/* Hold-to-delete progress ring */
+@keyframes hold-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-1px); } 75% { transform: translateX(1px); } }
+.hold-active { animation: hold-shake 0.12s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .hold-active { animation: none; } }
+
+/* Safe areas for notched phones + the mobile tab bar */
+.pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+body { overflow-x: hidden; }
+
+
+/* =====================================================================
+   Dashboard design system (mirrors the landing page)
+   - gcard: card with the saffron light that travels around the border on hover
+   - gglow: pill button with the same ring
+   - skel / loader: skeleton shimmer and spinner ring
+   ===================================================================== */
+@property --gb-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes gb-spin { to { --gb-a: 360deg; } }
+@keyframes skel-sweep { to { transform: translateX(100%); } }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+
+html { --ink: 26 20 16; }
+html.dark { --ink: 255 255 255; }
+
+.gcard, .gglow { position: relative; }
+.gcard::before, .gglow::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none; opacity: 0;
+  background: conic-gradient(from var(--gb-a), transparent 0 62%, #ff8c00 80%, #ffd89a 90%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: gb-spin 3.5s linear infinite paused; transition: opacity .4s;
+}
+.gcard:hover::before, .gcard:focus-within::before, .gcard.is-hot::before, .gglow:hover::before, .gglow:focus-visible::before { opacity: 1; animation-play-state: running; }
+.dark .gcard { background-image: linear-gradient(to bottom, #121212, #070707); }
+.dark .gcard.is-hot { background-image: linear-gradient(to bottom, #1d1307, #080808); }
+html:not(.dark) .gcard.is-hot { background-image: linear-gradient(to bottom, #fff3e2, #fffaf3); }
+
+/* Skeleton shimmer */
+.skel { position: relative; overflow: hidden; background: var(--muted); }
+.skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgb(255 255 255 / .07), transparent); animation: skel-sweep 1.4s ease-in-out infinite; }
+html:not(.dark) .skel::after { background: linear-gradient(90deg, transparent, rgb(255 255 255 / .75), transparent); }
+
+/* Spinner ring (saffron) */
+.loader-ring { width: 56px; height: 56px; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 50%, #ff8c00 85%, #ffd89a 100%); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); animation: ring-spin .9s linear infinite; }
+
+/* Illustration sizing helpers (unlayered so they beat the h-36 utility on the SVG) */
+.compact-scenes .scene svg { height: 6rem; }
+.plain-scenes .scene { border: 0; background: none; }
+.pop-in { animation: pop-in .35s cubic-bezier(.23, 1, .32, 1) both; }
+
+/* Dashboard canvas: soft saffron glow behind the content, like the landing sections */
+.dash-canvas { position: relative; isolation: isolate; }
+.dash-canvas::before { content: ""; position: absolute; left: 50%; top: -3rem; z-index: -1; width: min(100%, 1100px); height: 22rem; transform: translateX(-50%); background: radial-gradient(ellipse at center, rgba(255,122,0,.10), transparent 70%); pointer-events: none; }
+html:not(.dark) .dash-canvas::before { background: radial-gradient(ellipse at center, rgba(255,122,0,.10), transparent 70%); }
+
+/* Hot / warm / cold lead tiers */
+.tier-hot { border-color: rgb(249 115 22 / .4); background: rgb(249 115 22 / .15); color: #fdba74; }
+.tier-warm { border-color: rgb(251 191 36 / .3); background: rgb(251 191 36 / .1); color: #fcd34d; }
+.tier-cold { border-color: rgb(255 255 255 / .12); background: rgb(255 255 255 / .05); color: rgb(255 255 255 / .6); }
+html:not(.dark) .tier-hot { color: #c2410c; }
+html:not(.dark) .tier-warm { color: #a16207; }
+html:not(.dark) .tier-cold { border-color: rgb(26 20 16 / .15); background: rgb(26 20 16 / .04); color: rgb(26 20 16 / .6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .skel::after { display: none; }
+  .gcard::before, .gglow::before { animation: none; }
+  .loader-ring { animation-duration: 2.4s; }
+}
